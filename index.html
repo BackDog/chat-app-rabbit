@@ -17,17 +17,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-  </head>
-    <script>
-      let HOST = location.origin.replace(/^http/, 'ws')
-      let ws = new WebSocket(HOST);
-      let el;
 
-      ws.onmessage = (event) => {
-        el = document.getElementById('server-time');
-        el.innerHTML = 'Server time: ' + event.data;
-      };
-    </script>
   </head>
   <body>
     <div ng-app="">
@@ -56,7 +46,7 @@
         });
       });
       
-      var wsUri = "wss://e-server-rabbit.herokuapp.com/";
+      var wsUri = "wss://chat-app-rabbit.herokuapp.com/";
       
       function init(){
         output = document.getElementById("chat-box");
