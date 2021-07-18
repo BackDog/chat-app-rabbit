@@ -16,7 +16,7 @@ wss.on('connection', (ws) => {
   console.log('A client connected');
     ws.on('message', function(message) {
        wss.clients.forEach((client) => {
-           client.send(JSON.stringify({emit:"usersUpdate",data:socketsStatus}));
+           client.send(message);
        });
     });
   
