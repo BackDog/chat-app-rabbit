@@ -71,11 +71,12 @@
           setTimeout(testWebSocket(), 1000);
         };
         websocket.onmessage = function(evt) {
-          var str = evt.data.split("|");
-          username = '<strong>'+ str[0] + ': </strong>';
-          message = evt.data.split("|")[1];
-          writeToScreen(username + message);
-      
+          if (evt.data !== "{}") {
+            var str = evt.data.split("|");
+            username = '<strong>'+ str[0] + ': </strong>';
+            message = evt.data.split("|")[1];
+            writeToScreen(username + message);
+          }
         };
         websocket.onerror = function(evt) {
           setTimeout(testWebSocket(), 5000);
