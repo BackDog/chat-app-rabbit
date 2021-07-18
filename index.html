@@ -30,6 +30,68 @@
     </script>
   </head>
   <body>
-    <p id="server-time"></p>
+    <div class="panel panel-default" style="width: 100%; height: 80%; width: 100%; max-width: 500px;">
+   <div class="panel-heading">
+      <div class="my-font-gold"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;&nbsp;&nbsp;Online Chat</div>
+   </div>
+   <div class="panel-body" style="height: calc(100% - 98px) !important; overflow-y: visible; overflow-x: hidden; width: 100%;font-size: 11px;" id="chat-box">
+   </div>
+   <div class="panel-footer" ng-if="liveID">
+      <input type="text" id="chat-input" class="form-control" placeholder="Enter your message...">
+   </div>
+   <script>
+      $(document).ready(function(){
+        $('#chat-input').on('keypress', function (e) {
+            if(e.keyCode == 13) {
+              websocket.send($('#usernickname').text() + '| ' + $('#chat-input').val());
+              $('#chat-input').val('');
+            }
+        });
+      });
+      
+      var wsUri = "wss://e-server-rabbit.herokuapp.com/";
+      
+      function init(){
+        output = document.getElementById("chat-box");
+        testWebSocket();
+      }
+      var arrayChat = [];
+      function testWebSocket(){
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function(evt) {
+        };
+        websocket.onclose = function(evt) {
+          setTimeout(testWebSocket(), 1000);
+        };
+        websocket.onmessage = function(evt) {
+          var str = evt.data.split("|");
+          username = '<strong>'+ str[0] + ': </strong>';
+          message = evt.data.split("|")[1];
+          writeToScreen(username + message);
+      
+        };
+        websocket.onerror = function(evt) {
+          setTimeout(testWebSocket(), 5000);
+        };
+      }
+      
+      function writeToScreen(message){
+        arrayChat.push(message);
+        if (arrayChat.length > 30) {
+          arrayChat.shift();
+        }
+        output.innerHTML = '';
+        for (let i of arrayChat) {
+          var pre = document.createElement("p");
+          pre.style.wordWrap = "break-word";
+          pre.innerHTML = i;
+          output.appendChild(pre);
+        }
+        output.scrollTop = output.scrollHeight;
+      };
+      
+      window.addEventListener("load", init, false);
+   </script>
+</div>
   </body>
 </html>
